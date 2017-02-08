@@ -4,7 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
 /**
  * User
@@ -12,7 +12,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  */
-class User implements UserInterface, \Serializable
+class User implements AdvancedUserInterface, \Serializable
 {
     /**
      * @var int
@@ -86,7 +86,7 @@ class User implements UserInterface, \Serializable
 
     public function getSalt()
     {
-        // TODO: Add in real salt later
+        // Don't need salt for bcrypt
         return null;
     }
 
@@ -143,6 +143,29 @@ class User implements UserInterface, \Serializable
         // TODO: Implement eraseCredentials() method.
     }
 
+    public function isAccountNonExpired()
+    {
+        return true;
+        // If you change this make sure to serialize and unserialize the persistent property you use
+    }
+
+    public function isCredentialsNonExpired()
+    {
+        return true;
+        // If you change this make sure to serialize and unserialize the persistent property you use
+    }
+
+    public function isAccountNonLocked()
+    {
+        return true;
+        // If you change this make sure to serialize and unserialize the persistent property you use
+    }
+
+    public function isEnabled()
+    {
+        return $this->isActive;
+    }
+
     /** @see \Serializable::serialize() */
     public function serialize()
     {
@@ -150,6 +173,7 @@ class User implements UserInterface, \Serializable
             $this->id,
             $this->username,
             $this->password,
+            $this->isActive,
             // see section on salt below
             // $this->salt,
         ));
@@ -162,6 +186,7 @@ class User implements UserInterface, \Serializable
             $this->id,
             $this->username,
             $this->password,
+            $this->isActive,
             // see section on salt below
             // $this->salt
             ) = unserialize($serialized);
