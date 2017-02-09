@@ -1,0 +1,33 @@
+
+{#{% block stylesheets %}#}
+    {#<style>{{ source('Registration/register.scss') }}</style>#}
+{#{% endblock %}#}
+
+{% stylesheets filter="scssphp" output="css/app.css"
+    'assets/css/register.scss'
+%}
+<link rel="stylesheet" href="{{ asset_url }}" />
+{% endstylesheets %}
+
+<div class="container">
+
+    <div class="title">
+        <p>Login</p>
+    </div>
+
+    {{ form_start(form) }}
+    {{ form_widget(form.username, { 'attr': {'class': "username",
+        'placeholder': 'Username'} }) }}
+    {{ form_widget(form.plainPassword, { 'attr': {'class': "password",
+        'placeholder': 'Password'} }) }}
+
+        <button type="submit">Sign Up</button>
+    {{ form_end(form) }}
+
+    {#<form>#}
+        {#<input type="text" class="user-name" placeholder="Username">#}
+        {#<input type="text" class="password" placeholder="Password">#}
+        {#<input type="button" class="login-button" value="Log In">#}
+        {#<input type="button" class="signup-button" value="Sign Up">#}
+    {#</form>#}
+</div>

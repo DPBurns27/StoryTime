@@ -1,0 +1,64 @@
+$background:  #79C7C5;
+$background2:	#888888;
+$titleColor: #34587F; //#456990;
+$titleTextColor: #FFFFFF;
+$storyBackground: #EEEEEE;
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+}
+
+body {
+    font-family: sans-serif;
+    background-color: $background;
+}
+
+a {
+    text-decoration: none;
+}
+
+.container {
+    position: relative;
+    margin: 0 auto 0;
+    margin-top: 20px;
+    width: 200px;
+    height: 145px;
+    background-color: $background2;
+    text-align: center;
+
+}
+
+.title {
+    margin: 0 auto;
+    background-color: $titleColor;
+    text-align: left;
+    padding-left: 10px;
+    color: $titleTextColor;
+}
+
+input {
+    margin: 0 auto;
+    //text-align: center;
+    margin-bottom: 5px;
+    padding-left: 5px;
+    width: 150px;
+    background-color: $storyBackground;
+}
+
+button {
+    width: 100px;
+//radius: 0px;
+    background-color: $storyBackground;
+}
+form {
+//text-align: left;
+}
+
+
+
+
