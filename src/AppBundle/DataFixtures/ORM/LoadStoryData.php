@@ -61,7 +61,7 @@ class LoadStoryData implements FixtureInterface, ContainerAwareInterface
         $story->setUsers($users);
         $story->setBody($body);
 
-        $story->setUrlID($story->getId());
+        $story->setUrlID(base64_encode(random_bytes(6)));
         $dt = new \DateTime('now');
         $story->setCreationDate($dt);
         $story->setCompletionDate($dt->add(new \DateInterval('PT1H')));
