@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {% stylesheets filter="scssphp" output="css/app.css"
+        'assets/css/login.scss'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+
+        <div class="title">
+            <p>Login</p>
+        </div>
+
+        {% if error is defined %}
+            {% if error %}
+                <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+        {% endif %}
+
+        {#{{ form_start(form) }}#}
+        {#{{ form_widget(form.username, { 'attr': {'class': "username",#}
+            {#'name': '_username',#}
+            {#'placeholder': 'Username'} }) }}#}
+        {#{{ form_widget(form.plainPassword, { 'attr': {'class': "password",#}
+            {#'name': '_password',#}
+            {#'placeholder': 'Password'} }) }}#}
+        {#{{ form_end(form) }}#}
+
+        <form method="post">
+            <input type="text" class="user-name" placeholder="Username" name="_username">
+            <input type="password" class="password" placeholder="Password" name="_password">
+            <input type="submit" formaction="{{ path('login_check') }}" class="login-button" value="Log In" name="login">
+            <input type="submit" formaction="{{ path('signup') }}" class="signup-button" value="Sign Up" name="signup">
+        </form>
+
+    </div>
+{% endblock %}

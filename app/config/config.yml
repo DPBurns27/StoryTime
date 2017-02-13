@@ -77,3 +77,21 @@ assetic:
         cssrewrite: ~
         scssphp:
             formatter: 'Leafo\ScssPhp\Formatter\Compressed'
+
+monolog:
+  handlers:
+    app_stream:
+      type:  stream
+      level: info
+      path:  "%kernel.logs_dir%/%kernel.environment%_app.log"
+      channels: app
+    debug_stream:
+      type:  stream
+      level: debug
+      path:  "%kernel.logs_dir%/%kernel.environment%_debug.log"
+      channels: app
+    php_stream:
+      type:  stream
+      level: error
+      path:  "%kernel.logs_dir%/%kernel.environment%_php.log"
+      channels: php

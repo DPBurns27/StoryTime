@@ -17,20 +17,34 @@ security:
                 # if you're using multiple entity managers
                 # manager_name: customer
 
+    access_control:
+        - { path: ^/signup, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/, roles: ROLE_USER }
+#        - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+
     firewalls:
-        # disables authentication for assets and the profiler, adapt it according to your needs
+
+      # disables authentication for assets and the profiler, adapt it according to your needs
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
+        login:
+            pattern:   ^/(login|signup)$
+            anonymous: true
+
         main:
-            anonymous: ~
             pattern:    ^/
-            http_basic: ~
+            anonymous: false
             provider: our_db_provider
             form_login:
                 login_path: login
-                check_path: login
+                check_path: login_check
+            logout:
+                path:   /logout
+                target: /login
+#                always_use_default_target_path: true
             # activate different ways to authenticate
 
             # http_basic: ~
@@ -38,3 +52,4 @@ security:
 
             # form_login: ~
             # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
+
