@@ -37,8 +37,6 @@ class LoginController extends Controller
 //                return $this->redirectToRoute('homepage');
             //}
 
-            // Redirect them when they have signed up
-            //return $this->redirectToRoute();
         //}
 
         //$varsForView['form'] = $form->createView();

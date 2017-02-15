@@ -190,5 +190,15 @@ class Story
     {
         return $this->completionDate;
     }
+
+    /**
+     * Add a word to the body
+     *
+     * @param string $word
+     */
+    public function addWord($word)
+    {
+        $this->setBody($this->getBody() . " " . $word);
+    }
 }
 
