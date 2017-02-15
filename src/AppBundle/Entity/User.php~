@@ -3,8 +3,10 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\ManyToMany;
+use Doctrine\Common\Collections\ArrayCollection;
 
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
 /**
  * User
@@ -12,7 +14,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  */
-class User implements UserInterface, \Serializable
+class User implements AdvancedUserInterface, \Serializable
 {
     /**
      * @var int
@@ -38,16 +40,27 @@ class User implements UserInterface, \Serializable
     private $password;
 
     /**
+     * @var string
+     */
+    private $plainPassword;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="isActive", type="boolean")
      */
     private $isActive;
 
+    /**
+     * Many Users have Many Groups.
+     * @ManyToMany(targetEntity="Story", inversedBy="users")
+     */
+    private $stories;
+
     public function __construct()
     {
         $this->isActive = true;
-//        TODO: add salt
+        $this->stories = new ArrayCollection();
     }
 
     /**
@@ -86,8 +99,32 @@ class User implements UserInterface, \Serializable
 
     public function getSalt()
     {
-        // TODO: Add in real salt later
+        // Don't need salt for bcrypt
         return null;
+    }
+
+    /**
+     * Set password
+     *
+     * @param string $plainPassword
+     *
+     * @return User
+     */
+    public function setPlainPassword($plainPassword)
+    {
+        $this->plainPassword = $plainPassword;
+
+        return $this;
+    }
+
+    /**
+     * Get password
+     *
+     * @return string
+     */
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
     }
 
     /**
@@ -143,6 +180,29 @@ class User implements UserInterface, \Serializable
         // TODO: Implement eraseCredentials() method.
     }
 
+    public function isAccountNonExpired()
+    {
+        return true;
+        // If you change this make sure to serialize and unserialize the persistent property you use
+    }
+
+    public function isCredentialsNonExpired()
+    {
+        return true;
+        // If you change this make sure to serialize and unserialize the persistent property you use
+    }
+
+    public function isAccountNonLocked()
+    {
+        return true;
+        // If you change this make sure to serialize and unserialize the persistent property you use
+    }
+
+    public function isEnabled()
+    {
+        return $this->isActive;
+    }
+
     /** @see \Serializable::serialize() */
     public function serialize()
     {
@@ -150,6 +210,7 @@ class User implements UserInterface, \Serializable
             $this->id,
             $this->username,
             $this->password,
+            $this->isActive,
             // see section on salt below
             // $this->salt,
         ));
@@ -162,6 +223,7 @@ class User implements UserInterface, \Serializable
             $this->id,
             $this->username,
             $this->password,
+            $this->isActive,
             // see section on salt below
             // $this->salt
             ) = unserialize($serialized);
@@ -173,4 +235,3 @@ class User implements UserInterface, \Serializable
     }
 
 }
-

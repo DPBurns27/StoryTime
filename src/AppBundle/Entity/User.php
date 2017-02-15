@@ -3,6 +3,8 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\ManyToMany;
+use Doctrine\Common\Collections\ArrayCollection;
 
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
@@ -49,10 +51,16 @@ class User implements AdvancedUserInterface, \Serializable
      */
     private $isActive;
 
+    /**
+     * Many Users have Many Groups.
+     * @ManyToMany(targetEntity="Story", inversedBy="users")
+     */
+    private $stories;
+
     public function __construct()
     {
         $this->isActive = true;
-//        TODO: add salt
+        $this->stories = new ArrayCollection();
     }
 
     /**
@@ -226,4 +234,39 @@ class User implements AdvancedUserInterface, \Serializable
         return array('ROLE_USER');
     }
 
+
+    /**
+     * Add story
+     *
+     * @param \AppBundle\Entity\Story $story
+     *
+     * @return User
+     */
+    public function addStory(\AppBundle\Entity\Story $story)
+    {
+        $this->stories[] = $story;
+        $story->addUser($this); // synchronously updating inverse side
+
+        return $this;
+    }
+
+    /**
+     * Remove story
+     *
+     * @param \AppBundle\Entity\Story $story
+     */
+    public function removeStory(\AppBundle\Entity\Story $story)
+    {
+        $this->stories->removeElement($story);
+    }
+
+    /**
+     * Get stories
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getStories()
+    {
+        return $this->stories;
+    }
 }
