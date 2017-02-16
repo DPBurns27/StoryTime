@@ -68,7 +68,7 @@ class StoryController extends Controller
     {
         $story = new Story();
 
-        $story->setUser(array($this->getUser()));
+        $story->addUser($this->getUser());
         $story->setBody("");
         $story->setUrlID(base64_encode(random_bytes(6)));
         $dt = new \DateTime('now');

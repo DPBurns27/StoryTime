@@ -189,6 +189,8 @@ class Story
     public function addUser(\AppBundle\Entity\User $user)
     {
         $this->users[] = $user;
+        // Syncs the user and story additions up with story as the primary
+        $user->addStory($this);
 
         return $this;
     }

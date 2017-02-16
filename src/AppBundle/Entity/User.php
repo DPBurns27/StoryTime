@@ -245,8 +245,6 @@ class User implements AdvancedUserInterface, \Serializable
     public function addStory(\AppBundle\Entity\Story $story)
     {
         $this->stories[] = $story;
-        $story->addUser($this); // synchronously updating inverse side
-
         return $this;
     }
 

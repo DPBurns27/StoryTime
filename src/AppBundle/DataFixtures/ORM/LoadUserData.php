@@ -8,13 +8,14 @@
 
 namespace AppBundle\DataFixtures\ORM;
 
-use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
+use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use AppBundle\Entity\User;
 
-class LoadUserData implements FixtureInterface, ContainerAwareInterface
+class LoadUserData extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
     /**
      * @var ContainerInterface
@@ -44,6 +45,7 @@ class LoadUserData implements FixtureInterface, ContainerAwareInterface
 
 
         $manager->flush();
+
     }
 
     public function createUser($username, $plainPassword)
@@ -57,5 +59,14 @@ class LoadUserData implements FixtureInterface, ContainerAwareInterface
         $user->setPassword($password);
 
         $this->manager->persist($user);
+
+        $this->addReference($username, $user);
+    }
+
+    public function getOrder()
+    {
+        // the order in which fixtures will be loaded
+        // the lower the number, the sooner that this fixture is loaded
+        return 1;
     }
 }

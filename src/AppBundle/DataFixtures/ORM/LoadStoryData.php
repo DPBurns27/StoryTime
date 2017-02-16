@@ -8,14 +8,15 @@
 
 namespace AppBundle\DataFixtures\ORM;
 
-use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
+use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use AppBundle\Entity\Story;
 
 
-class LoadStoryData implements FixtureInterface, ContainerAwareInterface
+class LoadStoryData extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
     /**
      * @var ContainerInterface
@@ -48,8 +49,16 @@ class LoadStoryData implements FixtureInterface, ContainerAwareInterface
                       <p>It is a way I have of driving off the spleen, and regulating the circulation. Whenever I find myself growing grim about the mouth; whenever it is a damp, drizzly November in my soul; whenever I find myself involuntarily pausing before coffin warehouses, and bringing up the rear of every funeral I meet; and especially whenever my hypos get such an upper hand of me, that it requires a strong moral principle to prevent me from deliberately stepping into the street, and methodically knocking people's hats off, then, I account it high time to get to sea as soon as I can.</p>";
 
         // test stories
-        $this->createStory(array('David','Enid'), $testBody1);
-        $this->createStory(array('Roald','Enid'), $testBody2);
+        // users are obtained from running the LoadUserData fixture before this and setting a
+        // reference to the users objects
+        $this->createStory(
+            array($this->getReference('David'),$this->getReference('Enid')),
+            $testBody1
+        );
+        $this->createStory(
+            array($this->getReference('Roald'), $this->getReference('Enid')),
+            $testBody2
+        );
 
         $manager->flush();
     }
@@ -58,7 +67,11 @@ class LoadStoryData implements FixtureInterface, ContainerAwareInterface
     {
         $story = new Story();
 
-        $story->setUsers($users);
+        foreach ($users as $user)
+        {
+            $story->addUser($user);
+        }
+
         $story->setBody($body);
 
         $story->setUrlID(base64_encode(random_bytes(6)));
@@ -68,5 +81,12 @@ class LoadStoryData implements FixtureInterface, ContainerAwareInterface
 
 
         $this->manager->persist($story);
+    }
+
+    public function getOrder()
+    {
+        // the order in which fixtures will be loaded
+        // the lower the number, the sooner that this fixture is loaded
+        return 2;
     }
 }
