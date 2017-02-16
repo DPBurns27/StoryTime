@@ -25,6 +25,9 @@ class StoryController extends Controller
             );
         }
 
+        // Checks if the user is allowed to actually edit the story
+        $this->denyAccessUnlessGranted('edit', $story);
+
         // TODO: Check if the story is still active before allowing editing
 
         if ($request->request->has('next_word')) {

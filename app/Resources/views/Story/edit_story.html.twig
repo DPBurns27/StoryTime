@@ -1,3 +1,4 @@
+{#{% extends 'story.html.twig' %}#}
 {% extends 'base.html.twig' %}
 
 {% block stylesheets %}
@@ -22,10 +23,12 @@
         <div class="square-text" >
             {{ body }}
         </div>
+        {% block edit_story_form %}
         <form method="post">
             <input type="text" class="next-word" placeholder="Type Word" name="next_word">
             {#<input type="submit" formaction="{{ path('signup') }}" class="signup-button" value="Sign Up" name="signup">#}
             <input type="submit" class="add-word" value="Add Word" name="add_word">
         </form>
+        {% endblock %}
     </div>
 {% endblock %}
