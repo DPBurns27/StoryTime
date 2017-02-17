@@ -8,13 +8,14 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class StoryController extends Controller
 {
     /**
      * @Route("/e/{id}", name="edit_story")
      * @ParamConverter("story", class="AppBundle:Story")
-     * @Template("default/index.html.twig")
+     * @Template("Story/edit_story.html.twig")
      */
     public function editAction(Story $story = null, $id, Request $request)
     {
@@ -29,14 +30,18 @@ class StoryController extends Controller
         $this->denyAccessUnlessGranted('edit', $story);
 
         // TODO: Check if the story is still active before allowing editing
-
-        if ($request->request->has('next_word')) {
+        //&& $request->request->has('next_word')
+        if ($request->isXmlHttpRequest()) {
+            $this->get("logger")->info("Received ajax request");
             $input = $request->request->all();
             $story->addWord($input['next_word']);
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($story);
             $em->flush();
+
+//            return new JsonResponse(array('body' => $story->getBody()));
+            return $this->json(array('body' => $story->getBody(), 'code' => 100 , 'success' => true));
         }
 
         $body = $story->getBody();

@@ -1,34 +1,17 @@
-{#{% extends 'story.html.twig' %}#}
-{% extends 'base.html.twig' %}
+{% extends 'Story/story.html.twig' %}
 
-{% block stylesheets %}
-    {% stylesheets filter="scssphp" output="css/app.css"
-    'assets/css/index.scss'
-    %}
-        <link rel="stylesheet" href="{{ asset_url }}" />
-    {% endstylesheets %}
+{% block edit_story_form %}
+    <form onsubmit="addWord()">
+        <input type="text" class="next-word" placeholder="Type Word" name="next_word" id="next_word">
+        {#<input type="submit" formaction="{{ path('signup') }}" class="signup-button" value="Sign Up" name="signup">#}
+        {#<input type="submit" class="add-word" value="Add Word" name="add_word">#}
+    </form>
 {% endblock %}
 
-{% block body %}
-    <div class="container">
-
-        <div class="title">
-            <p>
-                StoryTime
-                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                    Username: {{ app.user.username }}
-                {% endif %}
-            </p>
-        </div>
-        <div class="square-text" >
-            {{ body }}
-        </div>
-        {% block edit_story_form %}
-        <form method="post">
-            <input type="text" class="next-word" placeholder="Type Word" name="next_word">
-            {#<input type="submit" formaction="{{ path('signup') }}" class="signup-button" value="Sign Up" name="signup">#}
-            <input type="submit" class="add-word" value="Add Word" name="add_word">
-        </form>
-        {% endblock %}
-    </div>
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts '@AppBundle/Resources/js/edit_story.js' %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 {% endblock %}
+

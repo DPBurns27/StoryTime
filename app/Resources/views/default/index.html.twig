@@ -10,23 +10,8 @@
 
 {% block body %}
     <div class="container">
-
-        <div class="title">
-            <p>
-                StoryTime
-                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                    Username: {{ app.user.username }}
-                {% endif %}
-            </p>
-        </div>
-        <div class="square-text" >
-            {{ body }}
-        </div>
-
         <form method="post">
-            <input type="text" class="next-word" placeholder="Type Word" name="next_word">
-            {#<input type="submit" formaction="{{ path('signup') }}" class="signup-button" value="Sign Up" name="signup">#}
-            <input type="submit" class="add-word" value="Add Word" name="add_word">
+            <input type="submit" formaction="{{ path('new_story') }}" class="new-button" value="New Story" name="new_story">
         </form>
     </div>
 {% endblock %}

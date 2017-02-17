@@ -19,10 +19,14 @@
                 {% endif %}
             </p>
         </div>
-        <div class="square-text" >
+        <div class="square-text" id="square_text" >
             {{ body }}
         </div>
         {% block edit_story_form %}
         {% endblock %}
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
 {% endblock %}
