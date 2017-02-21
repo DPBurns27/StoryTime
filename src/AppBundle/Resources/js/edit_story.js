@@ -23,7 +23,6 @@ function addWord () {
         function(response){
             if(response.code == 100 && response.success){
                 $('#square_text').html(response.body);
-                //document.getElementById('next_word').value = "";
                 $('#next_word').val("");
             }
 

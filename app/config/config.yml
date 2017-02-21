@@ -95,3 +95,7 @@ monolog:
       level: error
       path:  "%kernel.logs_dir%/%kernel.environment%_php.log"
       channels: php
+
+services:
+    app.matcher:
+        class:        AppBundle\Service\MatcherService

@@ -47,9 +47,16 @@ class Story
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="completionDate", type="datetime")
+     * @ORM\Column(name="completionDate", type="datetime", nullable=true)
      */
     private $completionDate;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="isCompleted", type="boolean")
+     */
+    private $isCompleted;
 
     /**
      * Many Groups have Many Users.

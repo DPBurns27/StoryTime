@@ -74,22 +74,44 @@ class StoryController extends Controller
      */
     public function newAction()
     {
-        $story = new Story();
+        $matcher = $this->get('app.matcher');
 
-        $story->addUser($this->getUser());
-        $story->setBody("");
-        $story->setUrlID(base64_encode(random_bytes(6)));
-        $dt = new \DateTime('now');
-        $story->setCreationDate($dt);
-        $story->setCompletionDate(new \DateTime('now'));
+        $matcher->addUnmatchedUser($this->getUser());
+        $users = $matcher->matchUsers();
 
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($story);
-        $em->flush();
+        if ($users)
+        {
+            $story = new Story();
+            foreach ($users as $user)
+            {
+                $story->addUser($user);
+            }
+            $story->setBody("");
+            $dt = new \DateTime('now');
+            $story->setCreationDate($dt);
 
-        //redirect to the edit page
-        return $this->redirectToRoute('edit_story', array('id' => $story->getId()));
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($story);
+            $em->flush();
+
+            //redirect to the edit page
+            return $this->redirectToRoute('edit_story', array('id' => $story->getId()));
+        }
+
+        //redirect to the waiting page
+        return $this->redirectToRoute('waiting');
+    }
+
+    /**
+     * @Route("/waiting", name="waiting")
+     * @Template("Story/waiting.html.twig")
+     */
+    public function waitingAction()
+    {
+        return array();
     }
 }
+
+
 
 

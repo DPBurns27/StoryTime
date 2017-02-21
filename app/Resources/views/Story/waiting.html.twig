@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {% stylesheets filter="scssphp" output="css/app.css"
+    'assets/css/index.scss'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        Waiting...
+    </div>
+{% endblock %}
